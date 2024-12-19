@@ -1,0 +1,31 @@
+#version of the CloudFormation template
+AWSTemplateFormatVersion: "2010-09-09"
+#basic Description message
+Description: CloudFormation template to create two S3 buckets
+
+Resources:
+# First Bucket Configuration details
+  S3Bucket1:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: shaikfiroz-1
+      VersioningConfiguration:
+        Status: Enabled
+
+# Second Bucket Configuration details
+  S3Bucket2:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: shaikfiroz-2
+      VersioningConfiguration:
+        Status: Enabled
+
+# writing Log message to Stack Output 
+Outputs:
+  Bucket1Name:
+    Value: !Ref S3Bucket1
+    Description: Name of the first S3 bucket
+
+  Bucket2Name:
+    Value: !Ref S3Bucket2
+    Description: Name of the second S3 bucket
