@@ -18,14 +18,14 @@ jobs:
           name: Validate CloudFormation Template
           command: |
             aws cloudformation validate-template \
-              --template-body file://s3-buckets-template.yml
+              --template-body file://YmlScriptToCreateS3Buckets.yml
 
       # Deploy the CloudFormation stack to create the S3 buckets
       - run:
           name: Deploy CloudFormation Template
           command: |
             aws cloudformation deploy \
-              --template-file s3-buckets-template.yml \
+              --template-file YmlScriptToCreateS3Buckets.yml \
               --stack-name s3-buckets-stack \
               --capabilities CAPABILITY_NAMED_IAM
 
