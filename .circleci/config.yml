@@ -19,7 +19,7 @@ jobs:
           command: |
             aws cloudformation validate-template \
               --template-body file://YmlScriptToCreateS3Buckets.yml
-              --region us-east-1  # Replace with your preferred region
+              --region us-east-1  
 
       # Deploy the CloudFormation stack to create the S3 buckets
       - run:
@@ -29,7 +29,7 @@ jobs:
               --template-file YmlScriptToCreateS3Buckets.yml \
               --stack-name s3-buckets-stack \
               --capabilities CAPABILITY_NAMED_IAM
-              --region us-east-1  # Replace with your preferred region
+              --region us-east-1  
 
 workflows:
   version: 2
