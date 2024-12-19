@@ -1,31 +1,36 @@
-#version of the CloudFormation template
-AWSTemplateFormatVersion: "2010-09-09"
-#basic Description message
-Description: CloudFormation template to create two S3 buckets
+version: 2.1
 
-Resources:
-# First Bucket Configuration details
-  S3Bucket1:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: shaikfiroz-1
-      VersioningConfiguration:
-        Status: Enabled
+executors:
+  aws-executor:
+    docker:
+      - image: amazon/aws-cli:2.12.0  # AWS CLI Docker image for executing CloudFormation commands
 
-# Second Bucket Configuration details
-  S3Bucket2:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: shaikfiroz-2
-      VersioningConfiguration:
-        Status: Enabled
+jobs:
+  # Job to deploy the CloudFormation stack
+  deploy:
+    executor: aws-executor
+    steps:
+      # Checkout the code from the repository
+      - checkout
 
-# writing Log message to Stack Output 
-Outputs:
-  Bucket1Name:
-    Value: !Ref S3Bucket1
-    Description: Name of the first S3 bucket
+      # Validate the CloudFormation template to ensure it's correct
+      - run:
+          name: Validate CloudFormation Template
+          command: |
+            aws cloudformation validate-template \
+              --template-body file://s3-buckets-template.yml
 
-  Bucket2Name:
-    Value: !Ref S3Bucket2
-    Description: Name of the second S3 bucket
+      # Deploy the CloudFormation stack to create the S3 buckets
+      - run:
+          name: Deploy CloudFormation Template
+          command: |
+            aws cloudformation deploy \
+              --template-file s3-buckets-template.yml \
+              --stack-name s3-buckets-stack \
+              --capabilities CAPABILITY_NAMED_IAM
+
+workflows:
+  version: 2
+  deploy-workflow:
+    jobs:
+      - deploy  # Execute the deploy job in the workflow
